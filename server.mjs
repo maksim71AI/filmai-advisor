@@ -332,17 +332,18 @@ const KEYWORDS = {
 };
 
 const server = http.createServer(async (req, res) => {
-  try {
-    const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+  try {   
 
-    if (url.pathname === "/api/status" && req.method === "GET") {
-      return sendJson(res, 200, {
-        ai: Boolean(OPENAI_API_KEY),
-        tmdb: Boolean(TMDB_READ_TOKEN || TMDB_API_KEY),
-        mode: OPENAI_API_KEY ? "ai" : "demo"
+   if (req.url === "/" || req.url === "/index.html") {
+      const file = await readFile(path.join(PUBLIC_DIR, "index.html"));
+      res.writeHead(200, {
+        "Content-Type": "text/html"
       });
-    }
 
+      res.end(file);
+      return;
+      }
+    const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
     if (url.pathname === "/api/popular" && req.method === "GET") {
       const popular = [...MOVIES]
         .sort((a, b) => b.rating - a.rating)
