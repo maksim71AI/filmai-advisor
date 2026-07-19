@@ -26,7 +26,7 @@ const themeIcon = themeToggle.querySelector(".theme-icon");
 
 let latestMovies = [];
 let favorites = loadFavorites();
-
+let watchedMovies = loadWatchedMovies();
 const gradients = [
   ["#3c173a", "#111735"], ["#402215", "#2a123e"], ["#123b3c", "#19122f"],
   ["#3a1630", "#161d3b"], ["#263d19", "#172036"], ["#392314", "#1b1538"]
@@ -38,9 +38,10 @@ async function initialize() {
   initializeTheme();
   updateFavoritesCount();
   renderFavorites();
+  updateLibraryCount();
+  renderLibrary();
   await Promise.all([loadStatus(), loadPopular()]);
 }
-
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const query = queryInput.value.trim();
@@ -288,7 +289,28 @@ function loadFavorites() {
     return [];
   }
 }
+function updateLibraryCount() {
+  libraryCount.textContent = watchedMovies.length;
+}
 
+function loadWatchedMovies() {
+  try {
+    const stored = JSON.parse(localStorage.getItem("filmai-watched") || "[]");
+    return Array.isArray(stored) ? stored : [];
+  } catch {
+    return [];
+  }
+}
+
+function renderLibrary() {
+  libraryGrid.innerHTML = "";
+
+  if (!watchedMovies.length) {
+    libraryGrid.innerHTML =
+      '<div class="empty-state">История просмотров пока пуста</div>';
+    return;
+  }
+}
 let toastTimer;
 function showToast(message) {
   toast.textContent = message;
