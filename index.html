@@ -129,7 +129,48 @@
       </div>
     </div>
   </div>
-</aside>
+</aside><div class="rating-modal" id="ratingModal" aria-hidden="true">
+  <div class="rating-backdrop" id="ratingBackdrop"></div>
+
+  <div
+    class="rating-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ratingTitle"
+  >
+    <button
+      class="close-button rating-close"
+      id="closeRating"
+      type="button"
+      aria-label="Закрыть окно оценки"
+    >
+      ×
+    </button>
+
+    <p class="rating-kicker">Фильм просмотрен</p>
+
+    <h2 id="ratingTitle">Оцените фильм</h2>
+
+    <p class="rating-movie-title" id="ratingMovieTitle"></p>
+
+    <div
+      class="rating-scale"
+      id="ratingScale"
+      aria-label="Оценка фильма от 1 до 10"
+     >
+      <button type="button" data-rating="1">1</button>
+      <button type="button" data-rating="2">2</button>
+      <button type="button" data-rating="3">3</button>
+      <button type="button" data-rating="4">4</button>
+      <button type="button" data-rating="5">5</button>
+      <button type="button" data-rating="6">6</button>
+      <button type="button" data-rating="7">7</button>
+      <button type="button" data-rating="8">8</button>
+      <button type="button" data-rating="9">9</button>
+      <button type="button" data-rating="10">10</button>
+    </div>
+  </div>
+</div>
   <div class="toast" id="toast" role="status"></div>
 
   <footer>
