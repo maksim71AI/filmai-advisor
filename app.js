@@ -310,6 +310,79 @@ function renderLibrary() {
       '<div class="empty-state">История просмотров пока пуста</div>';
     return;
   }
+
+  watchedMovies.forEach((movie, index) => {
+    const [a, b] = gradients[index % gradients.length];
+    const row = document.createElement("article");
+
+    const watchedDate = movie.watchedAt
+      ? new Date(movie.watchedAt).toLocaleDateString("ru-RU")
+      : "";
+
+    row.className = "favorite-row";
+    row.style.setProperty("--poster-a", a);
+    row.style.setProperty("--poster-b", b);
+
+    row.innerHTML = `
+      <div class="favorite-row-poster">
+        ${
+          movie.poster
+            ? `<img src="${escapeAttribute(movie.poster)}" alt="" />`
+            : escapeHtml((movie.title || "F").charAt(0))
+        }
+      </div>
+
+      <div>
+        <h3>${escapeHtml(movie.title)}</h3>
+
+        <p>
+          ${escapeHtml(
+            [
+              movie.year,
+              watchedDate ? `Просмотрено ${watchedDate}` : null
+            ]
+              .filter(Boolean)
+              .join(" · ")
+          )}
+        </p>
+      </div>
+
+      <button type="button" aria-label="Удалить из истории">×</button>
+    `;
+
+    row.querySelector("button").addEventListener("click", () => {
+      toggleWatched(movie);
+    });
+
+    libraryGrid.appendChild(row);
+  });
+}
+function toggleWatched(movie) {
+  const index = watchedMovies.findIndex((item) => item.id === movie.id);
+
+  if (index >= 0) {
+    watchedMovies.splice(index, 1);
+    showToast("Удалено из истории просмотров");
+  } else {
+    watchedMovies.unshift({
+      ...movie,
+      watchedAt: new Date().toISOString()
+    });
+
+    watchedMovies = watchedMovies.slice(0, 100);
+    showToast("Добавлено в библиотеку");
+  }
+
+  localStorage.setItem("filmai-watched", JSON.stringify(watchedMovies));
+
+  updateLibraryCount();
+  renderLibrary();
+
+  if (!resultsSection.classList.contains("hidden")) {
+    renderMovies(resultsGrid, latestMovies, true);
+  }
+
+  loadPopular();
 }
 let toastTimer;
 function showToast(message) {
