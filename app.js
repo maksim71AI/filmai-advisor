@@ -110,11 +110,14 @@ drawerBackdrop.addEventListener("click", closeFavoritesDrawer);
 libraryButton.addEventListener("click", openLibrary);
 closeLibrary.addEventListener("click", closeLibraryDrawer);
 libraryBackdrop.addEventListener("click", closeLibraryDrawer);
+closeRating.addEventListener("click", closeRatingModal);
+ratingBackdrop.addEventListener("click", closeRatingModal);
 themeToggle.addEventListener("click", toggleTheme);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     closeFavoritesDrawer();
     closeLibraryDrawer();
+    closeRatingModal();
   }
 });
 function initializeTheme() {
@@ -292,6 +295,25 @@ function closeLibraryDrawer() {
   libraryDrawer.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
 }
+function openRatingModal(movie) {
+  currentRatingMovie = movie;
+  ratingMovieTitle.textContent = movie.title || "Фильм";
+
+  ratingScale.querySelectorAll("button").forEach((button) => {
+    button.classList.remove("active");
+  });
+
+  ratingModal.classList.add("open");
+  ratingModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeRatingModal() {
+  ratingModal.classList.remove("open");
+  ratingModal.setAttribute("aria-hidden", "true");
+  currentRatingMovie = null;
+  document.body.style.overflow = "";
+}
 
 function setLoading(loading) {
   submitButton.disabled = loading;
@@ -393,6 +415,7 @@ function toggleWatched(movie) {
 
     watchedMovies = watchedMovies.slice(0, 100);
     showToast("Добавлено в библиотеку");
+    openRatingModal(movie);
   }
 
   localStorage.setItem("filmai-watched", JSON.stringify(watchedMovies));
