@@ -457,6 +457,122 @@ textarea::placeholder { color: var(--muted); opacity: .78; }
 .favorite-row button { width: 32px; height: 32px; border: 0; border-radius: 50%; color: var(--muted); background: transparent; cursor: pointer; font-size: 18px; }
 .favorite-row button:hover { background: var(--accent-soft); color: var(--heading); }
 .empty-state { grid-column: 1 / -1; padding: 34px; border: 1px dashed var(--border); border-radius: 20px; color: var(--muted); text-align: center; font-size: 13px; }
+.rating-modal {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rating-modal.open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.rating-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.rating-modal.open .rating-backdrop {
+  opacity: 1;
+}
+
+.rating-panel {
+  position: relative;
+  z-index: 1;
+  width: min(500px, 100%);
+  padding: 38px 30px 30px;
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  text-align: center;
+  background: var(--drawer);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  opacity: 0;
+  transform: translateY(18px) scale(.97);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.rating-modal.open .rating-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.rating-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.rating-kicker {
+  margin: 0 0 8px;
+  color: var(--success);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.rating-panel h2 {
+  margin: 0;
+  color: var(--heading);
+  font-size: 30px;
+  letter-spacing: -1px;
+}
+
+.rating-movie-title {
+  min-height: 22px;
+  margin: 10px 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.rating-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 9px;
+}
+
+.rating-scale button {
+  min-height: 48px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  background: var(--surface);
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    transform .18s ease,
+    color .18s ease,
+    border-color .18s ease,
+    background .18s ease;
+}
+
+.rating-scale button:hover {
+  color: #fff;
+  border-color: transparent;
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.rating-scale button.active {
+  color: #fff;
+  border-color: transparent;
+  background: var(--accent);
+}
+
 .toast {
   position: fixed;
   z-index: 50;
