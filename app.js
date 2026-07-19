@@ -112,6 +112,17 @@ closeLibrary.addEventListener("click", closeLibraryDrawer);
 libraryBackdrop.addEventListener("click", closeLibraryDrawer);
 closeRating.addEventListener("click", closeRatingModal);
 ratingBackdrop.addEventListener("click", closeRatingModal);
+ratingScale.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-rating]");
+
+  if (!button || !currentRatingMovie) {
+    return;
+  }
+
+  const rating = Number(button.dataset.rating);
+  saveMovieRating(rating);
+});
+
 themeToggle.addEventListener("click", toggleTheme);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
@@ -315,6 +326,34 @@ function closeRatingModal() {
   document.body.style.overflow = "";
 }
 
+function saveMovieRating(rating) {
+  if (!currentRatingMovie) {
+    return;
+  }
+
+  const watchedMovie = watchedMovies.find(
+    (movie) => movie.id === currentRatingMovie.id
+  );
+
+  if (!watchedMovie) {
+    closeRatingModal();
+    return;
+  }
+
+  watchedMovie.userRating = rating;
+
+  localStorage.setItem(
+    "filmai-watched",
+    JSON.stringify(watchedMovies)
+  );
+
+  updateLibraryCount();
+  renderLibrary();
+
+  showToast(`Оценка ${rating}/10 сохранена`);
+  closeRatingModal();
+}
+
 function setLoading(loading) {
   submitButton.disabled = loading;
   submitButton.querySelector(".button-icon").textContent = loading ? "◌" : "✦";
@@ -382,8 +421,14 @@ function renderLibrary() {
         <p>
           ${escapeHtml(
             [
-              movie.year,
-              watchedDate ? `Просмотрено ${watchedDate}` : null
+              
+  movie.year,
+  movie.userRating
+    ? `Моя оценка ${movie.userRating}/10`
+    : null,
+  watchedDate
+    ? `Просмотрено ${watchedDate}`
+    : null
             ]
               .filter(Boolean)
               .join(" · ")
