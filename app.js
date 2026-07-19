@@ -193,7 +193,13 @@ function createMovieCard(movie, index, showReason) {
   card.style.setProperty("--poster-b", b);
 
   const isFavorite = favorites.some((item) => item.id === movie.id);
-  const isWatched = watchedMovies.some((item) => item.id === movie.id);
+  const watchedMovie = watchedMovies.find((item) => item.id === movie.id);
+const isWatched = Boolean(watchedMovie);
+const watchedButtonText = isWatched
+  ? watchedMovie.userRating
+    ? `Моя оценка ${watchedMovie.userRating}/10`
+    : "Оценить фильм"
+  : "Просмотрено";
   const trailerUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(`${movie.title} ${movie.year || ""} трейлер`)}`;
   const genres = (movie.genres || []).slice(0, 3);
   const subtitle = [movie.year, movie.duration ? `${movie.duration} мин` : null].filter(Boolean).join(" · ");
@@ -226,14 +232,17 @@ function createMovieCard(movie, index, showReason) {
     class="watched-button ${isWatched ? "active" : ""}"
     type="button"
   >
-    ${isWatched ? "Просмотрено ✓" : "Просмотрено"}
-  </button>
+    ${watchedButtonText}
+    </button>
 </div>
 </div>`;
 
-  card.querySelector(".favorite-icon").addEventListener("click", () => toggleFavorite(movie));
-  card.querySelector(".watched-button").addEventListener("click", () => {
-  toggleWatched(movie);
+ card.querySelector(".watched-button").addEventListener("click", () => {
+  if (isWatched) {
+    openRatingModal(watchedMovie);
+  } else {
+    toggleWatched(movie);
+  }
 });
   card.querySelector(".similar-button").addEventListener("click", () => {
     queryInput.value = `Мне понравился фильм «${movie.title}». Подбери что-нибудь похожее, но не предлагай сам этот фильм.`;
@@ -309,10 +318,18 @@ function closeLibraryDrawer() {
 function openRatingModal(movie) {
   currentRatingMovie = movie;
   ratingMovieTitle.textContent = movie.title || "Фильм";
+const savedMovie = watchedMovies.find((item) => item.id === movie.id);
+const savedRating = savedMovie?.userRating;
 
-  ratingScale.querySelectorAll("button").forEach((button) => {
-    button.classList.remove("active");
-  });
+ratingScale.querySelectorAll("button").forEach((button) => {
+  const buttonRating = Number(button.dataset.rating);
+
+  button.classList.toggle(
+    "active",
+    buttonRating === savedRating
+  );
+});
+
 
   ratingModal.classList.add("open");
   ratingModal.setAttribute("aria-hidden", "false");
@@ -349,7 +366,11 @@ function saveMovieRating(rating) {
 
   updateLibraryCount();
   renderLibrary();
+if (!resultsSection.classList.contains("hidden")) {
+  renderMovies(resultsGrid, latestMovies, true);
+}
 
+loadPopular();
   showToast(`Оценка ${rating}/10 сохранена`);
   closeRatingModal();
 }
