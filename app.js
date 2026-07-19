@@ -253,6 +253,17 @@ function closeFavoritesDrawer() {
   favoritesDrawer.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
 }
+function openLibrary() {
+  libraryDrawer.classList.add("open");
+  libraryDrawer.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeLibraryDrawer() {
+  libraryDrawer.classList.remove("open");
+  libraryDrawer.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
 
 function setLoading(loading) {
   submitButton.disabled = loading;
