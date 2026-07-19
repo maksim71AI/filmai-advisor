@@ -100,11 +100,16 @@ document.getElementById("newSearchButton").addEventListener("click", () => {
 favoritesButton.addEventListener("click", openFavorites);
 closeFavorites.addEventListener("click", closeFavoritesDrawer);
 drawerBackdrop.addEventListener("click", closeFavoritesDrawer);
+libraryButton.addEventListener("click", openLibrary);
+closeLibrary.addEventListener("click", closeLibraryDrawer);
+libraryBackdrop.addEventListener("click", closeLibraryDrawer);
 themeToggle.addEventListener("click", toggleTheme);
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") closeFavoritesDrawer();
+  if (event.key === "Escape") {
+    closeFavoritesDrawer();
+    closeLibraryDrawer();
+  }
 });
-
 function initializeTheme() {
   const current = document.documentElement.dataset.theme || "light";
   applyTheme(current);
