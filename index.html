@@ -106,6 +106,30 @@
     </div>
   </aside>
 
+  <aside class="favorites-drawer" id="libraryDrawer" aria-hidden="true">
+  <div class="drawer-backdrop" id="libraryBackdrop"></div>
+
+  <div class="drawer-panel">
+    <div class="drawer-header">
+      <h2>Моя библиотека</h2>
+
+      <button
+        id="closeLibrary"
+        class="close-button"
+        type="button"
+        aria-label="Закрыть библиотеку"
+      >
+        ×
+      </button>
+    </div>
+
+    <div id="libraryGrid" class="favorites-list">
+      <div class="empty-state">
+        История просмотров пока пуста
+      </div>
+    </div>
+  </div>
+</aside>
   <div class="toast" id="toast" role="status"></div>
 
   <footer>
