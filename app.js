@@ -173,6 +173,7 @@ function createMovieCard(movie, index, showReason) {
   card.style.setProperty("--poster-b", b);
 
   const isFavorite = favorites.some((item) => item.id === movie.id);
+  const isWatched = watchedMovies.some((item) => item.id === movie.id);
   const trailerUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(`${movie.title} ${movie.year || ""} трейлер`)}`;
   const genres = (movie.genres || []).slice(0, 3);
   const subtitle = [movie.year, movie.duration ? `${movie.duration} мин` : null].filter(Boolean).join(" · ");
@@ -192,13 +193,28 @@ function createMovieCard(movie, index, showReason) {
     <div class="movie-content">
       <div class="genre-list">${genres.map((genre) => `<span>${escapeHtml(genre)}</span>`).join("")}</div>
       <p class="movie-reason">${escapeHtml(reason || "Подходящий вариант для вашего запроса.")}</p>
-      <div class="card-actions">
-        <a href="${trailerUrl}" target="_blank" rel="noopener noreferrer">Трейлер</a>
-        <button class="similar-button" type="button">Похожее</button>
-      </div>
-    </div>`;
+     <div class="card-actions">
+  <a href="${trailerUrl}" target="_blank" rel="noopener noreferrer">
+    Трейлер
+  </a>
+
+  <button class="similar-button" type="button">
+    Похожее
+  </button>
+
+  <button
+    class="watched-button ${isWatched ? "active" : ""}"
+    type="button"
+  >
+    ${isWatched ? "Просмотрено ✓" : "Просмотрено"}
+  </button>
+</div>
+</div>`;
 
   card.querySelector(".favorite-icon").addEventListener("click", () => toggleFavorite(movie));
+  card.querySelector(".watched-button").addEventListener("click", () => {
+  toggleWatched(movie);
+});
   card.querySelector(".similar-button").addEventListener("click", () => {
     queryInput.value = `Мне понравился фильм «${movie.title}». Подбери что-нибудь похожее, но не предлагай сам этот фильм.`;
     charCount.textContent = queryInput.value.length;
