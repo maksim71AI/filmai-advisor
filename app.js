@@ -20,6 +20,11 @@ const libraryGrid = document.getElementById("libraryGrid");
 const libraryCount = document.getElementById("libraryCount");
 const closeLibrary = document.getElementById("closeLibrary");
 const libraryBackdrop = document.getElementById("libraryBackdrop");
+const ratingModal = document.getElementById("ratingModal");
+const ratingBackdrop = document.getElementById("ratingBackdrop");
+const closeRating = document.getElementById("closeRating");
+const ratingMovieTitle = document.getElementById("ratingMovieTitle");
+const ratingScale = document.getElementById("ratingScale");
 const toast = document.getElementById("toast");
 const themeToggle = document.getElementById("themeToggle");
 const themeIcon = themeToggle.querySelector(".theme-icon");
@@ -27,6 +32,7 @@ const themeIcon = themeToggle.querySelector(".theme-icon");
 let latestMovies = [];
 let favorites = loadFavorites();
 let watchedMovies = loadWatchedMovies();
+let currentRatingMovie = null;
 const gradients = [
   ["#3c173a", "#111735"], ["#402215", "#2a123e"], ["#123b3c", "#19122f"],
   ["#3a1630", "#161d3b"], ["#263d19", "#172036"], ["#392314", "#1b1538"]
