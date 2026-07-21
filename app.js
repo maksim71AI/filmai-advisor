@@ -20,6 +20,8 @@ const libraryGrid = document.getElementById("libraryGrid");
 const libraryCount = document.getElementById("libraryCount");
 const librarySort = document.getElementById("librarySort");
 const librarySearch = document.getElementById("librarySearch");
+const watchedTotal = document.getElementById("watchedTotal");
+const averageRating = document.getElementById("averageRating");
 const closeLibrary = document.getElementById("closeLibrary");
 const libraryBackdrop = document.getElementById("libraryBackdrop");
 const ratingModal = document.getElementById("ratingModal");
@@ -409,6 +411,32 @@ function loadFavorites() {
 function updateLibraryCount() {
   libraryCount.textContent = watchedMovies.length;
 }
+  function updateLibraryStats() {
+  watchedTotal.textContent = watchedMovies.length;
+
+  const ratings = watchedMovies
+    .map((movie) => Number(movie.userRating))
+    .filter(
+      (rating) =>
+        Number.isFinite(rating) &&
+        rating >= 1 &&
+        rating <= 10
+    );
+
+  if (!ratings.length) {
+    averageRating.textContent = "—";
+    return;
+  }
+
+  const ratingSum = ratings.reduce(
+    (sum, rating) => sum + rating,
+    0
+  );
+
+  const average = ratingSum / ratings.length;
+
+  averageRating.textContent = `${average.toFixed(1)}/10`;
+}
 
 function loadWatchedMovies() {
   try {
@@ -421,7 +449,8 @@ function loadWatchedMovies() {
 
 function renderLibrary() {
   libraryGrid.innerHTML = "";
-
+  updateLibraryStats();
+  
   if (!watchedMovies.length) {
     libraryGrid.innerHTML =
       '<div class="empty-state">История просмотров пока пуста</div>';
