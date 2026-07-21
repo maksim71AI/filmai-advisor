@@ -122,14 +122,24 @@
         ×
       </button>
     </div>
+<div class="library-toolbar">
+  <label for="librarySort">Сортировка</label>
 
+  <select id="librarySort">
+    <option value="newest">Сначала новые</option>
+    <option value="oldest">Сначала старые</option>
+    <option value="rating-high">Высокая оценка</option>
+    <option value="rating-low">Низкая оценка</option>
+  </select>
+</div>
     <div id="libraryGrid" class="favorites-list">
       <div class="empty-state">
         История просмотров пока пуста
       </div>
     </div>
   </div>
-</aside><div class="rating-modal" id="ratingModal" aria-hidden="true">
+</aside>
+  <div class="rating-modal" id="ratingModal" aria-hidden="true">
   <div class="rating-backdrop" id="ratingBackdrop"></div>
 
   <div
