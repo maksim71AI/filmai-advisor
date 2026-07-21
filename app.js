@@ -18,6 +18,7 @@ const libraryButton = document.getElementById("libraryButton");
 const libraryDrawer = document.getElementById("libraryDrawer");
 const libraryGrid = document.getElementById("libraryGrid");
 const libraryCount = document.getElementById("libraryCount");
+const librarySort = document.getElementById("librarySort");
 const closeLibrary = document.getElementById("closeLibrary");
 const libraryBackdrop = document.getElementById("libraryBackdrop");
 const ratingModal = document.getElementById("ratingModal");
@@ -110,6 +111,7 @@ drawerBackdrop.addEventListener("click", closeFavoritesDrawer);
 libraryButton.addEventListener("click", openLibrary);
 closeLibrary.addEventListener("click", closeLibraryDrawer);
 libraryBackdrop.addEventListener("click", closeLibraryDrawer);
+librarySort.addEventListener("change", renderLibrary);
 closeRating.addEventListener("click", closeRatingModal);
 ratingBackdrop.addEventListener("click", closeRatingModal);
 ratingScale.addEventListener("click", (event) => {
@@ -414,8 +416,50 @@ function renderLibrary() {
       '<div class="empty-state">История просмотров пока пуста</div>';
     return;
   }
+const sortedMovies = [...watchedMovies];
 
-  watchedMovies.forEach((movie, index) => {
+switch (librarySort.value) {
+  case "oldest":
+    sortedMovies.sort(
+      (a, b) =>
+        new Date(a.watchedAt || 0) - new Date(b.watchedAt || 0)
+    );
+    break;
+
+  case "rating-high":
+    sortedMovies.sort((a, b) => {
+      const ratingA = Number(a.userRating);
+      const ratingB = Number(b.userRating);
+
+      if (!ratingA && !ratingB) return 0;
+      if (!ratingA) return 1;
+      if (!ratingB) return -1;
+
+      return ratingB - ratingA;
+    });
+    break;
+
+  case "rating-low":
+    sortedMovies.sort((a, b) => {
+      const ratingA = Number(a.userRating);
+      const ratingB = Number(b.userRating);
+
+      if (!ratingA && !ratingB) return 0;
+      if (!ratingA) return 1;
+      if (!ratingB) return -1;
+
+      return ratingA - ratingB;
+    });
+    break;
+
+  case "newest":
+  default:
+    sortedMovies.sort(
+      (a, b) =>
+        new Date(b.watchedAt || 0) - new Date(a.watchedAt || 0)
+    );
+}
+  sortedMovies.forEach((movie, index) => {
     const [a, b] = gradients[index % gradients.length];
     const row = document.createElement("article");
 
