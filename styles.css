@@ -500,10 +500,31 @@ textarea::placeholder { color: var(--muted); opacity: .78; }
 }
 
 .library-search input:focus {
-  border-color: var(--accent);
-  background: var(--surface-strong);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  .library-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
 }
+
+.library-stats span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 10px;
+}
+
+.library-stats strong {
+  color: var(--heading);
+  font-size: 16px;
+  font-weight: 750;
+} 
+  
 .favorites-list { display: grid; gap: 10px; }
 .favorite-row {
   display: grid;
