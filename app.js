@@ -19,6 +19,7 @@ const libraryDrawer = document.getElementById("libraryDrawer");
 const libraryGrid = document.getElementById("libraryGrid");
 const libraryCount = document.getElementById("libraryCount");
 const librarySort = document.getElementById("librarySort");
+const librarySearch = document.getElementById("librarySearch");
 const closeLibrary = document.getElementById("closeLibrary");
 const libraryBackdrop = document.getElementById("libraryBackdrop");
 const ratingModal = document.getElementById("ratingModal");
@@ -121,6 +122,7 @@ librarySort.addEventListener("change", () => {
   localStorage.setItem("filmai-library-sort", librarySort.value);
   renderLibrary();
 });
+librarySearch.addEventListener("input", renderLibrary);
 closeRating.addEventListener("click", closeRatingModal);
 ratingBackdrop.addEventListener("click", closeRatingModal);
 ratingScale.addEventListener("click", (event) => {
@@ -425,8 +427,22 @@ function renderLibrary() {
       '<div class="empty-state">История просмотров пока пуста</div>';
     return;
   }
-const sortedMovies = [...watchedMovies];
+const searchQuery = librarySearch.value
+  .trim()
+  .toLocaleLowerCase("ru-RU");
 
+const sortedMovies = watchedMovies.filter((movie) => {
+  const title = String(movie.title || "")
+    .toLocaleLowerCase("ru-RU");
+
+  return title.includes(searchQuery);
+});
+
+if (!sortedMovies.length) {
+  libraryGrid.innerHTML =
+    '<div class="empty-state">Фильмы с таким названием не найдены</div>';
+  return;
+}
 switch (librarySort.value) {
   case "oldest":
     sortedMovies.sort(
