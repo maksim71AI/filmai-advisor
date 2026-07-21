@@ -46,6 +46,12 @@ async function initialize() {
   updateFavoritesCount();
   renderFavorites();
   updateLibraryCount();
+  const savedLibrarySort =
+  localStorage.getItem("filmai-library-sort");
+
+if (savedLibrarySort) {
+  librarySort.value = savedLibrarySort;
+}
   renderLibrary();
   await Promise.all([loadStatus(), loadPopular()]);
 }
@@ -111,7 +117,10 @@ drawerBackdrop.addEventListener("click", closeFavoritesDrawer);
 libraryButton.addEventListener("click", openLibrary);
 closeLibrary.addEventListener("click", closeLibraryDrawer);
 libraryBackdrop.addEventListener("click", closeLibraryDrawer);
-librarySort.addEventListener("change", renderLibrary);
+librarySort.addEventListener("change", () => {
+  localStorage.setItem("filmai-library-sort", librarySort.value);
+  renderLibrary();
+});
 closeRating.addEventListener("click", closeRatingModal);
 ratingBackdrop.addEventListener("click", closeRatingModal);
 ratingScale.addEventListener("click", (event) => {
